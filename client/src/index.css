@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-gray-50 to-gray-100;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Phone Input Styling */
+.phone-input-container {
+  width: 100%;
+}
+
+.phone-input {
+  width: 100% !important;
+  height: 48px !important;
+  padding-left: 60px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  background-color: #f9fafb !important;
+  font-size: 15px !important;
+  color: #111827 !important;
+  transition: all 0.2s !important;
+}
+
+.phone-input:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.phone-input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.phone-button {
+  border: 3px solid transparent !important;
+  background: linear-gradient(#f9fafb, #f9fafb) padding-box, linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff) border-box !important;
+  border-radius: 12px 0 0 12px !important;
+  padding: 0 8px !important;
+  width: 56px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s !important;
+}
+
+.phone-button:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.phone-dropdown {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: 2px solid #e5e7eb !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  margin-top: 4px !important;
+}
+
+.phone-dropdown .country {
+  padding: 10px 12px !important;
+  transition: background-color 0.2s !important;
+}
+
+.phone-dropdown .country:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.phone-dropdown .country.highlight {
+  background-color: #dbeafe !important;
+}
+
+.phone-search {
+  padding: 10px 12px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  margin: 8px !important;
+  width: calc(100% - 16px) !important;
+  font-size: 14px !important;
+}
+
+.phone-search:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+}
+
+select {
+  max-height: 200px !important;
+}
+
+select option {
+  padding: 8px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2563eb, #7c3aed);
+}
