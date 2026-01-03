@@ -11,7 +11,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState(null);
-  
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   const [editingContact, setEditingContact] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('-createdAt');
@@ -286,7 +287,7 @@ function App() {
           : 'bg-white border-gray-200'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex items-center h-16">
             {/* Logo/Title */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
@@ -299,8 +300,8 @@ function App() {
               }`}>Contact Manager</h1>
             </div>
 
-            {/* Navigation Actions: only dark mode and hamburger */}
-            <div className="flex items-center gap-3">
+            {/* Desktop actions (hidden on small) */}
+            <div className="hidden sm:flex items-center gap-3 ml-auto">
               <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
                 className={`p-2 rounded-lg transition-all duration-300 ${
@@ -321,9 +322,130 @@ function App() {
                 )}
               </button>
 
+              <div className="relative">
+                <button 
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-all text-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Export ▼
+                </button>
+                {showExportMenu && (
+                  <div className={`absolute top-full right-0 mt-1 rounded-lg shadow-lg border z-50 min-w-32 transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-600' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    <button onClick={() => { exportToCSV(); setShowExportMenu(false); }} className={`w-full px-4 py-2 text-left rounded-t-lg text-sm transition-colors duration-300 ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}>CSV</button>
+                    <button onClick={() => { exportToVCard(); setShowExportMenu(false); }} className={`w-full px-4 py-2 text-left text-sm transition-colors duration-300 ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}>vCard</button>
+                    <button onClick={() => { createBackup(); setShowExportMenu(false); }} className={`w-full px-4 py-2 text-left rounded-b-lg text-sm transition-colors duration-300 ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}>Backup</button>
+                  </div>
+                )}
+              </div>
+
+              <label className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-all cursor-pointer text-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                </svg>
+                Import CSV
+                <input type="file" accept=".csv" onChange={importFromCSV} className="hidden" />
+              </label>
+
+              <label className="flex items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-all cursor-pointer text-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                Restore
+                <input type="file" accept=".json" onChange={restoreBackup} className="hidden" />
+              </label>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowDeleted(!showDeleted)}
+                  className={`flex items-center gap-2 px-3 py-2 border rounded-lg font-medium transition-all text-sm ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Deleted ({deletedContacts.length})
+                </button>
+
+                {showDeleted && deletedContacts.length > 0 && (
+                  <div className={`absolute right-0 mt-2 w-96 rounded-xl shadow-2xl border z-50 max-h-96 overflow-y-auto transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-600' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    <div className="p-4">
+                      <h3 className={`text-lg font-bold mb-3 transition-colors duration-300 ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>Deleted Contacts</h3>
+                      <div className="space-y-3">
+                        {deletedContacts.map((contact) => (
+                          <div key={contact._id} className={`rounded-lg p-3 border transition-colors duration-300 ${
+                            isDarkMode 
+                              ? 'bg-gray-700 border-gray-600' 
+                              : 'bg-gray-50 border-gray-200'
+                          }`}>
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <h4 className={`font-semibold transition-colors duration-300 ${
+                                  isDarkMode ? 'text-white' : 'text-gray-900'
+                                }`}>{contact.name}</h4>
+                                <p className={`text-sm transition-colors duration-300 ${
+                                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                }`}>{contact.email}</p>
+                                <p className={`text-sm transition-colors duration-300 ${
+                                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                }`}>{contact.phone}</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                onClick={() => handleRestore(contact._id)}
+                                className="flex-1 px-3 py-1.5 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all"
+                              >
+                                Restore
+                              </button>
+                              <button
+                                onClick={() => handlePermanentDelete(contact._id)}
+                                className="flex-1 px-3 py-1.5 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-all"
+                              >
+                                Delete Forever
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile hamburger only */}
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className={`p-2 rounded-lg transition-all duration-300 ${isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}`}
+                className={`sm:hidden p-2 rounded-lg transition-all duration-300 ${isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}`}
                 aria-label="Open menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,35 +463,75 @@ function App() {
         <div className={`sm:hidden fixed top-16 left-0 right-0 z-40 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-b`}>
           <div className="max-w-7xl mx-auto px-4 py-3">
             <div className="flex flex-col gap-2">
-              <button onClick={() => { setIsDarkMode(!isDarkMode); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-                {isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              <button
+                onClick={() => { setIsDarkMode(prev => !prev); setShowMobileMenu(false); }}
+                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}
+                title="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+                <span className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Theme</span>
               </button>
 
               <div>
-                <button onClick={() => setShowMobileExport(prev => !prev)} className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100">
+                <button onClick={() => setShowMobileExport(prev => !prev)} className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
                   <span>Export</span>
                   <span>{showMobileExport ? '▴' : '▾'}</span>
                 </button>
                 {showMobileExport && (
                   <div className="mt-1 ml-2 flex flex-col gap-1">
-                    <button onClick={() => { exportToCSV(); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">CSV</button>
-                    <button onClick={() => { exportToVCard(); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">vCard</button>
-                    <button onClick={() => { createBackup(); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">Backup</button>
+                    <button onClick={() => { exportToCSV(); setShowMobileMenu(false); }} className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>CSV</button>
+                    <button onClick={() => { exportToVCard(); setShowMobileMenu(false); }} className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>vCard</button>
+                    <button onClick={() => { createBackup(); setShowMobileMenu(false); }} className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>Backup</button>
                   </div>
                 )}
               </div>
 
-              <label className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+              <label className={`w-full text-left px-3 py-2 rounded-lg cursor-pointer transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
                 Import CSV
                 <input type="file" accept=".csv" onChange={(e) => { importFromCSV(e); setShowMobileMenu(false); }} className="hidden" />
               </label>
 
-              <label className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+              <label className={`w-full text-left px-3 py-2 rounded-lg cursor-pointer transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
                 Restore Backup
                 <input type="file" accept=".json" onChange={(e) => { restoreBackup(e); setShowMobileMenu(false); }} className="hidden" />
               </label>
 
-              <button onClick={() => { setShowDeleted(!showDeleted); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">Deleted ({deletedContacts.length})</button>
+              <div>
+                <button onClick={() => { setShowDeleted(prev => !prev); }} className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-200 hover:bg-gray-800' : 'hover:bg-gray-100'}`}>Deleted ({deletedContacts.length})</button>
+                {showDeleted && (
+                  <div className={`mt-2 rounded-lg p-2 border transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-100 text-gray-900'}`}>
+                    {deletedContacts.length === 0 ? (
+                      <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>No deleted contacts</p>
+                    ) : (
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {deletedContacts.map((contact) => (
+                          <div key={contact._id} className={`rounded p-2 border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{contact.name}</h4>
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{contact.email}</p>
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{contact.phone}</p>
+                              </div>
+                              <div className="flex gap-2 ml-2">
+                                <button onClick={() => { handleRestore(contact._id); }} className="px-2 py-1 bg-green-500 text-white rounded-md text-sm">Restore</button>
+                                <button onClick={() => { handlePermanentDelete(contact._id); }} className="px-2 py-1 bg-red-500 text-white rounded-md text-sm">Delete</button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
