@@ -141,8 +141,8 @@ const ContactList = ({ contacts, onDelete, onEdit, onToggleFavorite, isLoading, 
                             }`}
                             style={{ animationDelay: `${index * 50}ms` }}
                         >
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="flex items-center gap-3">
+                            <div className="flex flex-col sm:flex-row items-start sm:justify-between mb-4 gap-3">
+                                                <div className="flex items-center gap-3">
                                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
                                         {contact.name.charAt(0).toUpperCase()}
                                     </div>
@@ -156,7 +156,7 @@ const ContactList = ({ contacts, onDelete, onEdit, onToggleFavorite, isLoading, 
                                     </div>
                                 </div>
 
-                                <div className="flex gap-2">
+                                                <div className="flex gap-2 mt-2 sm:mt-0">
                                     <button
                                         onClick={() => onToggleFavorite(contact._id)}
                                         className={`p-2 ${contact.isFavorite ? 'text-yellow-400' : 'text-gray-300'} hover:bg-yellow-50 rounded-lg transition-all`}

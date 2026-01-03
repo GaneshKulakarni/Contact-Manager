@@ -233,11 +233,11 @@ const ContactForm = ({ onSubmit, isSubmitting, editingContact, onCancelEdit, isD
                     </div>
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <button
                         type="submit"
                         disabled={!isFormValid || isSubmitting}
-                        className="flex-1 py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                        className="w-full sm:flex-1 py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                     >
                         {isSubmitting ? (
                             <>
@@ -260,7 +260,7 @@ const ContactForm = ({ onSubmit, isSubmitting, editingContact, onCancelEdit, isD
                         <button
                             type="button"
                             onClick={handleCancel}
-                            className={`py-4 px-8 font-semibold rounded-xl focus:outline-none focus:ring-4 transition-all transform hover:scale-[1.02] active:scale-[0.98] ${
+                            className={`w-full sm:w-auto py-4 px-8 font-semibold rounded-xl focus:outline-none focus:ring-4 transition-all transform hover:scale-[1.02] active:scale-[0.98] ${
                                 isDarkMode 
                                     ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 focus:ring-gray-600' 
                                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-300'

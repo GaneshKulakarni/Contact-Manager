@@ -9,6 +9,17 @@
   }
 }
 
+@layer base {
+  html {
+    font-size: 16px;
+  }
+
+  @media (max-width: 640px) {
+    html { font-size: 15px; }
+    .rounded-2xl { border-radius: 0.75rem; }
+  }
+}
+
 @layer utilities {
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
