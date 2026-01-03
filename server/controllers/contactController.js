@@ -263,34 +263,3 @@ export const toggleFavorite = async (req, res) => {
     }
 };
 
-// @desc    Toggle favorite status
-// @route   PUT /api/contacts/:id/favorite
-// @access  Public
-export const toggleFavorite = async (req, res) => {
-    try {
-        const contact = await Contact.findById(req.params.id);
-
-        if (!contact) {
-            return res.status(404).json({
-                success: false,
-                message: 'Contact not found'
-            });
-        }
-
-        contact.isFavorite = !contact.isFavorite;
-        await contact.save();
-
-        res.status(200).json({
-            success: true,
-            message: contact.isFavorite ? 'Added to favorites' : 'Removed from favorites',
-            data: contact
-        });
-    } catch (error) {
-        console.error('Error toggling favorite:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to toggle favorite',
-            error: error.message
-        });
-    }
-};
