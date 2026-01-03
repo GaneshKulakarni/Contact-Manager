@@ -300,6 +300,8 @@ function App() {
               }`}>Contact Manager</h1>
             </div>
 
+            <div className="flex-1" />
+
             {/* Desktop actions (hidden on small) */}
             <div className="hidden sm:flex items-center gap-3 ml-auto">
               <button
